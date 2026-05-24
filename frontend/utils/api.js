@@ -5,12 +5,12 @@
  *   'local'  → 打本地 Django (127.0.0.1:8000)
  *   'cloud'  → 打騰訊雲托管 (wx.cloud.callContainer)
  */
-const ENV = 'cloud';
+const ENV = 'local';
 
 // ── 本地設定 ──────────────────────────────────────────────
 // 微信開發工具模擬器用 127.0.0.1
 // 真機調試請換成你 Mac 的區網 IP，例如 'http://192.168.1.100:8000'
-const LOCAL_BASE_URL = 'http://172.20.10.8:8000';
+const LOCAL_BASE_URL = 'http://127.0.0.1:8000';
 
 // ── 雲端設定（切回雲端時用）─────────────────────────────
 const ENV_ID = 'prod-6g0zz7ch236e5ec6';

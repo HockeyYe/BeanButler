@@ -24,36 +24,52 @@ Local runtime files, generated files, private credentials, and manual backups sh
 - `.DS_Store`
 - `logs/`
 
-## Recommended Manual Cleanup
+## Cleanup Completed
 
-Because some of these files may contain useful historical data or uploaded images, do not delete them blindly.
-Move them into a local archive outside the repository first, then verify the app still runs.
+The local cleanup has been performed after confirming the project already has a manual backup elsewhere.
+The removed files were ignored runtime files, generated files, local credentials, local databases, uploaded media, and zip backups.
 
-Suggested PowerShell steps:
+Removed examples:
+
+- `frontend.zip`
+- `backend/__MACOSX/`
+- `backend/backend_fixed/.env`
+- `backend/backend_fixed/backup/`
+- `backend/backend_fixed/venv/`
+- `backend/backend_fixed/media/`
+- `backend/backend_fixed/db.sqlite3`
+- `backend/backend_fixed/data.json`
+- `backend/backend_fixed/data_backup.json`
+- `backend/backend_fixed/*.zip`
+- `__pycache__/`
+- `.DS_Store`
+
+If these files are needed later, restore them from the separate manual backup.
+
+## Recreate Local Files
+
+Create a local `.env`:
 
 ```powershell
-$repo = "C:\Users\86177\Desktop\Fullstack"
-$archive = "C:\Users\86177\Desktop\Fullstack_local_archive"
-New-Item -ItemType Directory -Force -Path $archive
-
-Move-Item -LiteralPath "$repo\frontend.zip" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\__MACOSX" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\backup" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\venv" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\media" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\db.sqlite3" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\data.json" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\data_backup.json" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\0419_2053(更改dashboard.zip" -Destination $archive
-Move-Item -LiteralPath "$repo\backend\backend_fixed\feedback.zip" -Destination $archive
+cd C:\Users\86177\Desktop\Fullstack\backend\backend_fixed
+Copy-Item .env.example .env
 ```
 
-Then recreate the backend environment from source:
+Then edit `.env` and fill in the real local database password and secrets.
+
+Recreate the backend virtual environment:
 
 ```powershell
 cd C:\Users\86177\Desktop\Fullstack\backend\backend_fixed
 py -3.11 -m venv venv
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+Run the backend:
+
+```powershell
+cd C:\Users\86177\Desktop\Fullstack\backend\backend_fixed
+.\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8000
 ```
 
 ## Git Workflow

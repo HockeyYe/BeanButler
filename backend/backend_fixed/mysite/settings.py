@@ -12,17 +12,49 @@ pymysql.install_as_MySQLdb()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def load_dotenv(path):
+    """Load simple KEY=VALUE pairs from a local .env file if present."""
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding='utf-8').splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.lower() in {'1', 'true', 'yes', 'on'}
+
+
+def env_list(name, default=None):
+    value = os.getenv(name)
+    if not value:
+        return default or []
+    return [item.strip() for item in value.split(',') if item.strip()]
+
+
+load_dotenv(BASE_DIR / '.env')
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j-_im6twlqdo5-%1f)qtstk*649ey@jqw$%!0x8@@h4%5b%6)o'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-only-change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # 建議在雲托管環境變數中控制：DJANGO_DEBUG=True/False
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = env_bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = ['*']  # 生產建議改成：['.tcloudbase.com', '.run.tcloudbase.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = env_list(
+    'DJANGO_ALLOWED_HOSTS',
+    ['localhost', '127.0.0.1', '0.0.0.0', '.tcloudbase.com', '.run.tcloudbase.com']
+)
 
 # 新增這一行：信任你的雲托管域名（包含 https:// 前綴）
 # 微信小程序走 API，不需要瀏覽器 CSRF。
@@ -33,7 +65,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://django-ye5o-236914-8-1414261904.sh.run.tcloudbase.com',
     'https://*.run.tcloudbase.com',
     'https://*.tcloudbase.com',
-]
+] + env_list('DJANGO_CSRF_TRUSTED_ORIGINS')
 
 # Application definition
 INSTALLED_APPS = [
@@ -70,7 +102,8 @@ MIDDLEWARE = [
 ]
 
 # CORS 設定（開發方便，生產可收緊）
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = env_bool('DJANGO_CORS_ALLOW_ALL_ORIGINS', DEBUG)
+CORS_ALLOWED_ORIGINS = env_list('DJANGO_CORS_ALLOWED_ORIGINS')
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -94,7 +127,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # 本地用 MySQL（與雲端一致），透過 .env 或環境變數設定連線資訊
+DB_NAME = os.getenv('DB_NAME', 'bean_butler')
+DB_USER = os.getenv('DB_USER', 'root')
+DB_PASSWORD = os.getenv('DB_PASSWORD', '')
 DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
+DB_PORT = os.getenv('DB_PORT', '3306')
+MYSQL_ADDRESS = os.getenv('MYSQL_ADDRESS')
+if MYSQL_ADDRESS and ':' in MYSQL_ADDRESS:
+    DB_HOST, DB_PORT = MYSQL_ADDRESS.rsplit(':', 1)
+elif MYSQL_ADDRESS:
+    DB_HOST = MYSQL_ADDRESS
 
 # 微信雲托管會自動注入 MYSQL_ADDRESS 這個環境變數
 if os.environ.get('MYSQL_ADDRESS'):
@@ -104,11 +146,11 @@ if os.environ.get('MYSQL_ADDRESS'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bean_butler',
-            'USER': 'root',
-            'PASSWORD': 'Yy20030914!',
-            'HOST': '10.2.111.146',
-            'PORT': '3306',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
             'OPTIONS': {
                 'charset': 'utf8mb4',
                 # 💡 這一行是關鍵：強制所有會話變量同步為 utf8mb4
@@ -122,11 +164,15 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bean_butler',
-            'USER': 'root',
-            'PASSWORD': '', # 你本地的密碼
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
+            },
         }
     }
 
@@ -220,10 +266,13 @@ if os.environ.get('MYSQL_ADDRESS'):
     # 🌩️ 雲端環境：使用完整的 HTTPS 域名
     # 這裡建議直接使用你 CSRF 列表中的那個域名
     # 務必確保結尾有斜槓 /
-    MEDIA_URL = 'https://beanbulter-236914-8-1414261904.sh.run.tcloudbase.com/media/'
+    MEDIA_URL = os.getenv(
+        'MEDIA_URL',
+        'https://beanbulter-236914-8-1414261904.sh.run.tcloudbase.com/media/'
+    )
 else:
     # 💻 本地環境：使用相對路徑
-    MEDIA_URL = '/media/'
+    MEDIA_URL = os.getenv('MEDIA_URL', '/media/')
 
 # 其他設定
 X_FRAME_OPTIONS = 'SAMEORIGIN'

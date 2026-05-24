@@ -1,0 +1,95 @@
+<view class="checkout-container">
+  
+  <scroll-view class="checkout-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="padding-spacer">
+      
+      <view class="section-card member-rights">
+        <view class="member-header">
+          <view class="member-tag">{{memberLevelTag}}</view>
+          <text class="rights-title">本單專屬權益</text>
+        </view>
+        <view class="rights-detail" wx:if="{{memberDiscountRate < 1.0}}">
+          <text>全场 MOP 商品享 {{memberDiscountText}} 折优惠</text>
+          <text class="discount-val">- MOP {{memberDiscountAmount}}</text>
+        </view>
+        <view class="rights-detail" wx:else>
+          <text>黃金會員暫無折扣優惠</text>
+        </view>
+      </view>
+
+      <view class="section-card">
+        
+        <view class="section-title">商品明细</view>
+        
+        <view wx:for="{{cartDetailList}}" wx:key="id" class="checkout-item">
+          <image src="{{item.image}}" mode="aspectFill" class="item-img"></image>
+          <view class="item-info">
+            <view class="item-header">
+              <text class="item-name">{{item.name}}</text>
+              <text class="item-price">MOP {{item.price}}</text>
+            </view>
+            <view class="item-header-sub">
+               <text class="item-customText">{{item.customText}}</text>
+               <text class="item-quantity">x{{item.quantity}}</text>
+            </view>
+          </view>
+        </view>
+
+        <picker mode="selector" range="{{timeOptions}}" value="{{selectedTimeIndex}}" bindchange="onTimeChange">
+          <view class="coupon-row time-row">
+            <text class="coupon-label">取餐时间</text>
+            <view class="coupon-right">
+              <text class="coupon-desc {{selectedTimeIndex > 0 ? 'selected' : ''}}">{{timeOptions[selectedTimeIndex]}}</text>
+              <text class="arrow-right">›</text>
+            </view>
+          </view>
+        </picker>
+        <view class="coupon-row" bindtap="selectCoupon">
+          <text class="coupon-label">优惠券</text>
+          <view class="coupon-right">
+            <text class="coupon-desc {{selectedCoupon ? 'selected' : ''}}">{{selectedCoupon ? selectedCoupon.name : availableCouponCount + '张'}}</text>
+            <text class="arrow-right">›</text>
+          </view>
+        </view>
+
+        <view class="divider"></view>
+
+        <view class="price-summary">
+          <view class="summary-row" wx:if="{{memberLevelTag !== '黄金會員 V1'}}">
+            <text class="row-label">{{memberLevelTag}} 折扣</text>
+            <text class="row-val discount-green">- MOP {{memberDiscountAmount}}</text>
+          </view>
+          <view class="summary-row" wx:if="{{selectedCoupon}}">
+            <text class="row-label">优惠券抵扣</text>
+            <text class="row-val discount-green">- MOP {{couponDiscountAmount}}</text>
+          </view>
+        </view>
+
+        <view class="divider" wx:if="{{memberDiscountAmount > 0 || selectedCoupon}}"></view>
+
+        <view class="final-summary-wrap">
+          <view class="final-subtotal">
+            <text class="fs-label">小计</text>
+            <text class="fs-val">MOP {{payableAmount}}</text> <!--直接和總計同步用一個變量payableamount-->
+          </view>
+          <view class="final-beans">
+            <text class="fb-text">本单可得</text>
+            <image src="/images/coffee-bean-vector-icon.png" mode="aspectFit" class="fb-icon"></image>
+            <text class="fb-text">咖啡豆 {{earnedBeans}}</text>
+          </view>
+        </view>
+
+      </view>
+
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view class="price-wrap">
+      <text class="total-label">总计</text>
+      <text class="total-price">MOP {{payableAmount}}</text>
+    </view>
+    <button class="confirm-btn" bindtap="confirmOrder">确认下单</button>
+  </view>
+
+</view>

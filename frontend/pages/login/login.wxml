@@ -1,0 +1,37 @@
+login.wxml
+
+<view class="login-container">
+  
+  <view class="brand-section">
+    <text class="brand-name">Bean Butler</text>
+  </view>
+
+  <view class="avatar-section">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    </button>
+  </view>
+
+  <view class="input-section">
+    <input 
+      type="nickname" 
+      class="nickname-input" 
+      placeholder="請輸入暱稱" 
+      placeholder-class="placeholder-style"
+      bindinput="onNickNameInput"
+      value="{{nickName}}"
+    />
+  </view>
+
+  <view class="btn-section">
+    <button class="btn-wechat" bindtap="handleWechatLogin">微信授權登錄</button>
+    <button class="btn-cancel" bindtap="goBack">暫不登錄</button>
+  </view>
+
+  <view class="agreement">
+    <text>登錄即表示您已同意 </text>
+    <text class="link" bindtap="handleServiceProtocol">《用戶服務協議》</text>
+    <text> 與 </text>
+    <text class="link" bindtap="handlePrivacyProtocol">《隱私政策》</text>
+  </view>
+</view>

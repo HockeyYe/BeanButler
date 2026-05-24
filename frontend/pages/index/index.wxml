@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="swiper-wrapper">
+    <swiper class="banner-swiper" circular autoplay interval="4000">
+      <swiper-item>
+        <image src="/images/banner1.jpg" class="banner-img" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/images/banner2.jpg" class="banner-img" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/images/banner3.jpg" class="banner-img" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/images/banner4.jpg" class="banner-img" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+    <view class="bottom-gradient"></view>
+  </view>
+
+  <view class="order-section">
+    <view class="brand-info">
+      <text class="brand-name">BEAN BUTLER</text>
+    </view>
+    <button class="order-btn" bindtap="goToOrder">立即點單</button>
+  </view>
+</view>

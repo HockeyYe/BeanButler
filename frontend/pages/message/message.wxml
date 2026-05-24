@@ -1,0 +1,40 @@
+<view class="message-container">
+  
+  <scroll-view class="message-list" scroll-y enhanced show-scrollbar="{{false}}">
+    
+    <view wx:if="{{messages.length === 0}}" class="empty-state">
+      <text>暂无留言，写下你的第一条建议吧</text>
+    </view>
+
+    <view wx:for="{{messages}}" wx:key="id" class="message-card">
+      <view class="msg-header">
+        <text class="user-name">我</text>
+        <text class="msg-time">{{item.time}}</text>
+      </view>
+      
+      <view class="msg-content">{{item.content}}</view>
+      
+      <view wx:if="{{item.reply}}" class="reply-box">
+        <text class="reply-label">BEAN BUTLER 回复</text>
+        <text class="reply-content">{{item.reply}}</text>
+      </view>
+    </view>
+    
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <view class="input-panel">
+    <textarea class="msg-input" 
+              style="height: {{inputHeight}}px;"
+              placeholder="期待您的反馈与建议..." 
+              bindinput="onInput" 
+              bindlinechange="onLineChange"
+              value="{{newMessage}}" 
+              maxlength="200" 
+              fixed="true"
+              cursor-spacing="20" 
+              show-confirm-bar="{{false}}"></textarea>
+    <button class="btn-submit" bindtap="submitMessage">发送</button>
+  </view>
+
+</view>

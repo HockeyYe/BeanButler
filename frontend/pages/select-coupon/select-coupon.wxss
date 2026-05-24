@@ -1,0 +1,136 @@
+/* pages/select-coupon/select-coupon.wxss */
+page {
+  background-color: #F7F7F7;
+  height: 100vh;
+}
+
+.coupons-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.coupons-list {
+  flex: 1;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+.no-coupon-card {
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  margin-bottom: 24rpx;
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.02);
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.arrow-right {
+  font-size: 36rpx;
+  color: #CCCCCC;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 200rpx 0;
+  color: #999999;
+  font-size: 28rpx;
+}
+
+/* 优惠券卡片复用样式 */
+.coupon-card {
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  margin-bottom: 24rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.02);
+}
+
+.coupon-left {
+  width: 180rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-right: 2rpx dashed #EEEEEE; 
+  margin-right: 30rpx;
+  flex-shrink: 0;
+}
+
+.coupon-value {
+  font-size: 44rpx; 
+  font-weight: 600;
+  color: #000000;
+}
+
+.coupon-right {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 0; 
+}
+
+.coupon-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-right: 20rpx;
+  min-width: 0; 
+}
+
+.coupon-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coupon-condition {
+  font-size: 24rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coupon-expire {
+  font-size: 22rpx;
+  color: #999999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coupon-action {
+  flex-shrink: 0;
+}
+
+.use-btn {
+  background-color: #000000;
+  color: #FFFFFF;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  padding: 0 !important;
+  width: 140rpx !important; 
+  height: 60rpx;
+  line-height: 60rpx;
+  margin: 0;
+  border: none;
+  font-weight: 500;
+}
+
+.use-btn:active {
+  opacity: 0.8;
+}

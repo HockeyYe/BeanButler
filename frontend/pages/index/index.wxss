@@ -1,0 +1,83 @@
+/**index.wxss**/
+page {
+  background-color: #FFFFFF;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 顶部轮播图占比调整为 64% */
+.swiper-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 64vh; 
+}
+
+.banner-swiper {
+  width: 100%;
+  height: 100%;
+}
+  
+.banner-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 渐变层：确保图片与下方纯白背景完美融合 */
+.bottom-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 180rpx;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #FFFFFF);
+  z-index: 5;
+}
+
+/* 底部操作区：留白更加充裕 */
+.order-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom)); /* 避开自定义底栏高度 */
+  box-sizing: border-box;
+}
+
+.brand-info {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.brand-name {
+  font-size: 32rpx;
+  letter-spacing: 10rpx; /* 增加字间距，营造呼吸感 */
+  color: #999999;
+  display: block;
+  margin-bottom: 0rpx;
+  font-weight: 300;
+}
+
+/* 立即点单按钮：使用截图中的棕灰色调 */
+.order-btn {
+  background-color: #7B685B; 
+  color: #FFFFFF;
+  border-radius: 50rpx;
+  width: 60% !important; 
+  font-size: 30rpx;
+  font-weight: 500;
+  padding: 24rpx 0;
+  border: none;
+  box-shadow: 0 10rpx 30rpx rgba(123, 104, 91, 0.15);
+}
+
+.order-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}

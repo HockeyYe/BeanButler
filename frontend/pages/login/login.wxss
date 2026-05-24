@@ -1,0 +1,113 @@
+/* pages/login/login.wxss */
+page {
+  background-color: #ffffff;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* 品牌文字：下移並居中 */
+.brand-section {
+  width: 100%;
+  text-align: center;
+  margin-top: 140rpx; /* 下調位置 */
+  margin-bottom: 20rpx;
+}
+
+.brand-name {
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #333333;
+  letter-spacing: 4rpx;
+}
+
+/* 頭像區域：居中對齊 */
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  padding: 60rpx 0 100rpx 0;
+}
+
+.avatar-wrapper {
+  padding: 0 !important;
+  width: 160rpx !important;
+  height: 160rpx !important;
+  border-radius: 20rpx; /* 依照圖片的微圓角 */
+  background-color: #f7f7f7;
+  border: none;
+}
+
+.avatar-wrapper::after { border: none; }
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+/* 暱稱欄位：仿微信原生通欄 */
+.input-section {
+  display: flex;
+  align-items: center;
+  padding: 35rpx 40rpx;
+  border-top: 1rpx solid #f2f2f2;
+  border-bottom: 1rpx solid #f2f2f2;
+}
+
+.input-section::before {
+  content: "暱稱";
+  font-size: 32rpx;
+  color: #000;
+  width: 120rpx;
+}
+
+.nickname-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+/* 按鈕區域 */
+.btn-section {
+  padding: 100rpx 40rpx 0 40rpx;
+}
+
+.btn-wechat {
+  width: 100% !important;
+  height: 96rpx;
+  background-color: #07c160;
+  color: #fff;
+  border-radius: 12rpx;
+  font-size: 34rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cancel {
+  margin-top: 30rpx;
+  background-color: transparent;
+  color: #576b95;
+  font-size: 28rpx;
+}
+
+.btn-cancel::after { border: none; }
+
+/* 協議區塊：解決點擊不到的問題 */
+.agreement {
+  position: fixed;
+  bottom: 80rpx;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  z-index: 999; /* 確保在最上層 */
+}
+
+.link {
+  color: #576b95;
+  padding: 10rpx 0; /* 增加點擊熱區 */
+}

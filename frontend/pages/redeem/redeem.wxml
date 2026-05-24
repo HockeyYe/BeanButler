@@ -1,0 +1,37 @@
+<view class="redeem-container">
+
+  <view class="points-header">
+    <view class="points-info">
+      <text class="points-label">當前可用積分</text>
+      <text class="points-value">{{userPoints}}</text>
+    </view>
+    <image class="points-coffee-icon" src="/images/coffeebean.png" mode="aspectFit"></image>
+  </view>
+
+  <view class="redeem-list">
+    <text class="section-title">積分兌換優惠券</text>
+
+    <view wx:for="{{options}}" wx:key="id" class="redeem-card">
+      <view class="card-left">
+        <text class="redeem-discount">減 MOP {{item.discount_amount}}</text>
+        <text class="redeem-name">{{item.name}}</text>
+        <text class="redeem-desc">滿 MOP {{item.min_spend}} 可用 · 領取後 {{item.validity_days}} 天有效</text>
+      </view>
+
+      <view class="card-right">
+        <view class="points-cost">
+          <text class="num">{{item.points_cost}}</text>
+          <text class="unit">積分</text>
+        </view>
+        <button
+          class="exchange-btn {{userPoints >= item.points_cost ? '' : 'disabled'}}"
+          bindtap="exchange"
+          data-id="{{item.id}}"
+          disabled="{{isLoading}}">
+          兌換
+        </button>
+      </view>
+    </view>
+
+  </view>
+</view>

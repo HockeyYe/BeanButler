@@ -1,0 +1,37 @@
+/* app.wxss */
+page {
+  background-color: #F9F5F0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background-color: #4A2C2C;
+  color: white;
+  border-radius: 40rpx;
+  padding: 24rpx 0;
+  font-size: 32rpx;
+  border: none;
+  box-shadow: 0 4rpx 8rpx rgba(74,44,44,0.2);
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.04);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+/* 分割线 */
+.divider {
+  height: 2rpx;
+  background-color: #F0F0F0;
+  margin: 24rpx 0;
+}

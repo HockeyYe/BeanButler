@@ -1,0 +1,36 @@
+<view class="coupons-container">
+
+  <scroll-view class="coupons-list" scroll-y enhanced show-scrollbar="{{false}}">
+
+    <view wx:if="{{showEmpty}}" class="empty-state">暫無可用優惠券</view>
+
+    <view wx:for="{{coupons}}" wx:key="id"
+      class="coupon-card {{!item.reachable ? 'disabled-card' : ''}}"
+      bindtap="selectCoupon" data-coupon="{{item}}">
+
+      <view class="coupon-left">
+        <text class="coupon-value"> MOP {{item.discount_amount}}</text>
+        <text class="coupon-min">滿 {{item.min_spend}} 可用</text>
+      </view>
+
+      <view class="coupon-right">
+        <view class="coupon-info">
+          <text class="coupon-name">{{item.name}}</text>
+          <text class="coupon-condition">{{item.condition_text}}</text>
+          <text class="coupon-expire">有效期至 {{item.expire_date}}</text>
+        </view>
+
+        <view class="coupon-action">
+          <button class="use-btn {{!item.reachable ? 'btn-disabled' : ''}}">
+            {{item.reachable ? '選擇' : '未達門檻'}}
+          </button>
+        </view>
+      </view>
+
+    </view>
+
+  </scroll-view>
+
+
+
+</view>

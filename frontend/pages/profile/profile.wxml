@@ -1,0 +1,76 @@
+<view class="profile-container">
+
+<view class="user-header">
+  <view class="unified-user-card">
+    
+    <block wx:if="{{!hasLogin}}">
+      <view class="user-info-wrap" bindtap="goToLogin">
+        <view class="avatar-box empty-avatar"></view>
+        <view class="text-box">
+          <text class="nickname">登錄 / 註冊</text>
+          <text class="desc">點擊登錄享受會員權益</text>
+        </view>
+      </view>
+      <view class="points-row">
+        <view class="points-item">
+          <text class="p-val">--</text>
+          <text class="p-label">可用積分</text>
+        </view>
+        <view class="points-btn disabled" bindtap="goToLogin">兌換</view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="user-info-wrap">
+        <image class="avatar-box" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view class="text-box">
+          <text class="nickname">{{userInfo.nickName}}</text>
+          <view class="level-tag"><text>{{levelDisplayName}}</text></view>
+        </view>
+      </view>
+      <view class="points-row">
+        <view class="points-item">
+          <text class="p-val">{{userInfo.points}}</text>
+          <text class="p-label">可用積分</text>
+        </view>
+        <view class="points-btn" bindtap="goToRedeem">兌換</view>
+      </view>
+    </block>
+
+  </view>
+</view>
+
+<view class="menu-group">
+  
+  <!-- 完善資料按鈕 -->
+  <view class="menu-item" bindtap="goToEditProfile" wx:if="{{hasLogin}}">
+    <text class="menu-title">完善資料</text>
+    <view class="menu-right">
+      <text class="menu-hint">姓名、學號、電話</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+  <view class="divider" wx:if="{{hasLogin}}"></view>
+
+  <view class="menu-item" bindtap="goToCoupons">
+    <text class="menu-title">我的優惠卷</text>
+    <view class="menu-right">
+      <text class="menu-hint" wx:if="{{hasLogin}}">{{couponCount}} 張可用</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+  
+  <view class="divider"></view>
+
+  <view class="menu-item" bindtap="goToMessage">
+    <text class="menu-title">留言板</text>
+    <view class="menu-right">
+      <view class="arrow"></view>
+    </view>
+  </view>
+  
+</view>
+<view class="logout-section" wx:if="{{hasLogin}}">
+  <button class="btn-logout" bindtap="handleLogout">登出帳號</button>
+</view>
+</view> 

@@ -1,0 +1,47 @@
+<view class="coupons-container">
+
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" data-tab="0" bindtap="switchTab">
+      <text>可用</text>
+      <view class="tab-line" wx:if="{{currentTab === 0}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" data-tab="1" bindtap="switchTab">
+      <text>失效</text>
+      <view class="tab-line" wx:if="{{currentTab === 1}}"></view>
+    </view>
+  </view>
+
+  <scroll-view class="coupons-list" scroll-y enhanced show-scrollbar="{{false}}">
+
+    <!-- 未登入提示 -->
+    <view wx:if="{{!hasLogin}}" class="empty-state">
+      <text>請先登入查看優惠券</text>
+    </view>
+
+    <!-- 空狀態 -->
+    <view wx:elif="{{showEmpty}}" class="empty-state">暫無優惠券</view>
+
+    <!-- 券列表 -->
+    <view wx:for="{{coupons}}" wx:key="id" class="coupon-card {{currentTab === 1 ? 'disabled-card' : ''}}">
+
+      <view class="coupon-left">
+        <text class="coupon-value">MOP{{item.discount_amount}}</text>
+        <text class="coupon-min">滿{{item.min_spend}}可用</text>
+      </view>
+
+      <view class="coupon-right">
+        <view class="coupon-info">
+          <text class="coupon-name">{{item.name}}</text>
+          <text class="coupon-condition">{{item.condition_text}}</text>
+          <text class="coupon-expire">有效期至 {{item.expire_date}}</text>
+        </view>
+
+        <view class="coupon-action">
+          <button wx:if="{{currentTab === 0}}" class="use-btn" bindtap="useCoupon">去使用</button>
+          <view wx:if="{{currentTab === 1}}" class="stamp-text">已失效</view>
+        </view>
+      </view>
+
+    </view>
+  </scroll-view>
+</view>

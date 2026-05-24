@@ -1,0 +1,55 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background: white;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 9999;
+}
+
+.tab-bar-border {
+  background-color: rgba(0, 0, 0, 0.05);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tab-text {
+  position: relative;
+  font-size: 30rpx;
+  color: #999999;
+  font-family: 'PingFang SC', -apple-system;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.tab-text.active {
+  color: #000000;
+  font-weight: 600;
+}
+
+.indicator {
+  position: absolute;
+  bottom: 15rpx;
+  width: 32rpx;
+  height: 4rpx;
+  background: #000000;
+  border-radius: 2rpx;
+}

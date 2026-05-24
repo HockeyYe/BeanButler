@@ -1,0 +1,31 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script>
+    // 1. 获取从 Django 传来的数据
+    const labels = {{ sales_labels|safe }};
+    const data = {{ sales_data|safe }};
+    
+    const productLabels = {{ product_names|safe }};
+    const productData = {{ product_counts|safe }};
+
+    // 2. 渲染营收折线图
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line', 
+        data: {
+            labels: labels, // 这里链接了 Order 的日期
+            datasets: [{
+                label: '每日总营收 ($)',
+                data: data, // 这里链接了 Order 的总价
+                backgroundColor: 'rgba(133, 68, 66, 0.2)',
+                borderColor: 'rgba(133, 68, 66, 1)',
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        }
+    });
+
+    // 你可以再加一个 Canvas 用来显示产品销量 (productLabels 和 productData)
+</script>

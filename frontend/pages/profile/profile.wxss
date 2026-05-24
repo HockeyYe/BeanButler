@@ -1,0 +1,192 @@
+/* pages/profile/profile.wxss */
+page {
+  background-color: #F7F7F7; 
+}
+
+.profile-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部用户区 */
+.user-header {
+  padding: 40rpx 0;
+}
+
+/* ========== 核心重构：统一卡片 ========== */
+.unified-user-card {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 30rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
+}
+
+.user-info-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-box {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background-color: #E0E0E0;
+  margin-right: 30rpx;
+  flex-shrink: 0;
+}
+
+.empty-avatar {
+  background-color: #DDDDDD;
+}
+
+.text-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nickname {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 12rpx;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.level-tag {
+  align-self: flex-start;
+  background-color: #000000;
+  color: #FFFFFF;
+  font-size: 22rpx;
+  font-weight: 500;
+  padding: 6rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+/* 积分行（卡片内部下半部分） */
+.points-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 1rpx solid #F0F0F0; /* 极简的内部分割线 */
+}
+
+.points-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-val {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 4rpx;
+}
+
+.p-label {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.points-btn {
+  background-color: #F7F7F7;
+  color: #000000;
+  font-size: 26rpx;
+  font-weight: 500;
+  padding: 12rpx 36rpx;
+  border-radius: 40rpx;
+}
+
+.points-btn.disabled {
+  color: #CCCCCC;
+}
+/* ======================================== */
+
+/* 极简菜单列表 */
+.menu-group {
+  background-color: #FFFFFF;
+  margin: 0 30rpx;
+  border-radius: 20rpx;
+  padding: 10rpx 40rpx;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36rpx 0;
+}
+
+.menu-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+}
+
+.menu-hint {
+  font-size: 26rpx;
+  color: #999999;
+  margin-right: 16rpx;
+}
+
+/* 纯 CSS 绘制的极简箭头 */
+.arrow {
+  width: 14rpx;
+  height: 14rpx;
+  border-top: 3rpx solid #CCCCCC;
+  border-right: 3rpx solid #CCCCCC;
+  transform: rotate(45deg);
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #F5F5F5;
+}
+
+/* 退出登录 */
+.logout-wrap {
+  margin-top: 80rpx;
+  padding: 0 40rpx;
+}
+
+.btn-logout {
+  /* 1. 調小這個數值，或者改為負數（如 -20rpx）來強制靠攏 */
+  margin-top: 20rpx; 
+
+  background-color: #ffffff;
+  color: #000000;            /* 使用低調的深灰色，不會搶走上方積分的視覺重心 */
+  border: 1rpx solid #f0f0f0; /* 極淡的邊框，維持極簡風 */
+  border-radius: 16rpx;      /* 圓角大小建議與上方卡片一致 */
+  
+  font-size: 28rpx;
+  font-weight: 400;
+  padding: 24rpx 0;
+  
+  /* 寬度調整為 100% 並配合容器的 padding，或者設為 92% 居中 */
+  width: 100% !important;     
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-logout:active {
+  background-color: #fafafa;
+  opacity: 0.8;
+}
+
+.btn-logout:active {
+  background-color: #F0F0F0;
+}

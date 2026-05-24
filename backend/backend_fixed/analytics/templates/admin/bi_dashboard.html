@@ -1,0 +1,623 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.dw{font-family:var(--font-sans,system-ui);color:var(--color-text-primary,#e0d8d0);}
+.dh{padding:18px 22px 12px;border-bottom:0.5px solid rgba(128,128,128,0.2);display:flex;align-items:flex-end;justify-content:space-between;}
+.dh-title{font-size:19px;font-weight:500;}
+.dh-sub{color:#999;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.dh-dl{color:#999;font-size:10px;text-align:right;}
+.dh-dv{color:#c47a30;font-size:11px;font-weight:500;margin-top:1px;text-align:right;}
+
+/* filter bar */
+.filter-bar{display:flex;align-items:center;gap:8px;padding:9px 22px;background:rgba(128,128,128,0.04);border-bottom:0.5px solid rgba(128,128,128,0.14);flex-wrap:wrap;}
+.filter-label{font-size:10px;color:#777;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.fr{background:transparent;border:0.5px solid rgba(128,128,128,0.28);color:#999;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;font-family:inherit;transition:all .15s;}
+.fr.act{background:#c47a30;color:#fff;border-color:#c47a30;font-weight:500;}
+.fr:hover:not(.act){border-color:#c47a30;color:#c47a30;}
+.fsep{width:1px;height:16px;background:rgba(128,128,128,0.2);margin:0 2px;}
+.ci{display:none;align-items:center;gap:6px;}
+.ci.show{display:flex;}
+.ci input[type=date]{background:rgba(255,255,255,0.05);border:0.5px solid rgba(128,128,128,0.3);color:#ccc;border-radius:6px;padding:3px 8px;font-size:12px;font-family:inherit;outline:none;}
+.ci input[type=date]:focus{border-color:#c47a30;}
+.ci button{background:#c47a30;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;}
+.range-badge{font-size:10px;color:#c47a30;font-weight:500;margin-left:2px;}
+.fc-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(90,138,94,0.15);border:0.5px solid rgba(90,138,94,0.35);border-radius:4px;padding:2px 7px;font-size:10px;color:#5a8a5e;margin-left:6px;}
+
+/* tabs */
+.tabs{display:flex;gap:5px;padding:12px 22px 10px;flex-wrap:wrap;}
+.tb{background:transparent;border:0.5px solid rgba(128,128,128,0.3);color:#999;border-radius:6px;padding:5px 13px;cursor:pointer;font-size:12px;font-family:inherit;transition:all .15s;}
+.tb.act{background:#c47a30;color:#fff;border-color:#c47a30;font-weight:500;}
+.tb:hover:not(.act){border-color:#c47a30;color:#c47a30;}
+.ct{padding:16px 22px 22px;}
+.pg{display:none;}.pg.act{display:block;}
+
+/* cards & layout */
+.card{background:rgba(255,255,255,0.04);border:0.5px solid rgba(128,128,128,0.2);border-radius:10px;padding:16px;margin-bottom:11px;}
+.card:last-child{margin-bottom:0;}
+.ct2{border-left:2px solid #c47a30;padding-left:8px;color:#999;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:6px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:11px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:11px;}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:11px;margin-bottom:11px;}
+.kc{background:rgba(255,255,255,0.04);border:0.5px solid rgba(128,128,128,0.2);border-radius:10px;padding:14px;}
+.kl{color:#999;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.kv{font-size:22px;font-weight:500;margin-bottom:3px;color:#c47a30;}
+.kv2{font-size:22px;font-weight:500;margin-bottom:3px;}
+.kv3{font-size:18px;font-weight:500;margin-bottom:3px;color:#c47a30;}
+.ksub{font-size:10px;color:#888;}
+.kt{font-size:11px;}.kt.up{color:#5a8a5e;}.kt.dn{color:#a84040;}.kt.na{color:#888;}
+.cw{position:relative;width:100%;}
+.h200{height:200px;}.h240{height:240px;}.h180{height:180px;}.h160{height:160px;}.h280{height:280px;}.h150{height:150px;}
+
+/* list rows */
+.lr{padding:9px 0;border-bottom:0.5px solid rgba(128,128,128,0.15);}
+.lr:last-child{border-bottom:none;}
+.lm{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
+.lc{color:#999;}
+.lbb{height:6px;background:rgba(128,128,128,0.15);border-radius:3px;overflow:hidden;}
+.lb{height:100%;border-radius:3px;}
+.pl{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.pr{display:flex;justify-content:space-between;font-size:11px;align-items:center;}
+.pd{display:flex;align-items:center;gap:4px;color:#999;}
+.pdt{width:7px;height:7px;border-radius:50%;display:inline-block;}
+
+/* member */
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;background:rgba(128,128,128,0.08);border-radius:6px;padding:10px 0;margin-top:14px;text-align:center;}
+.sv{font-size:20px;font-weight:500;}.slb{color:#999;font-size:10px;margin-top:1px;}
+
+/* forecast */
+.fc-kpi{background:rgba(255,255,255,0.04);border:0.5px solid rgba(128,128,128,0.2);border-radius:10px;padding:14px;}
+.upg-card{background:rgba(128,128,128,0.06);border-radius:6px;padding:11px 13px;margin-bottom:7px;}
+.upg-card:last-child{margin-bottom:0;}
+.upg-m{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.upg-lv{font-size:12px;font-weight:500;}.upg-eta{font-size:11px;color:#c47a30;font-weight:500;}
+.upg-det{font-size:10px;color:#999;margin-bottom:6px;}
+.upg-bb{height:4px;background:rgba(128,128,128,0.15);border-radius:2px;overflow:hidden;}
+.upg-b{height:100%;border-radius:2px;}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;font-size:11px;color:#999;}
+.lg-item{display:flex;align-items:center;gap:4px;}
+.lg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.loading{text-align:center;padding:60px;color:#999;font-size:13px;}
+
+/* overall page divider */
+.sec-divider{height:0.5px;background:rgba(128,128,128,0.15);margin:4px 0 15px;}
+.sec-title{font-size:10px;color:#888;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+</style>
+
+<div class="dw">
+<div class="dh">
+  <div><div class="dh-sub">Business Intelligence Dashboard</div><div class="dh-title">Café Analytics</div></div>
+  <div><div class="dh-dl">Last updated</div><div class="dh-dv" id="lastUpdated">—</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tb act" onclick="sw(0)">Overview</button>
+  <button class="tb" onclick="sw(1)">Sales</button>
+  <button class="tb" onclick="sw(2)">Products</button>
+  <button class="tb" onclick="sw(3)">Members</button>
+  <button class="tb" onclick="sw(4)">Forecast</button>
+</div>
+
+<div class="filter-bar" id="globalFilterBar" style="border-top:0.5px solid rgba(128,128,128,0.14);">
+  <span class="filter-label">資料範圍</span>
+  
+  <div id="filterOptionsStandard" style="display:flex;gap:8px;">
+    <button class="fr act" id="fr30d" onclick="setRange('30d')">近 30 天</button>
+    <button class="fr" id="fr1y"    onclick="setRange('1y')">近 1 年</button>
+    <button class="fr" id="frAll"   onclick="setRange('all')">全部</button>
+  </div>
+
+  <div id="filterOptionsSales" style="display:none;gap:8px;">
+    <button class="fr" id="fr1d" onclick="setRange('1d')">今日 (On day)</button>
+    <button class="fr" id="fr1y_sales" onclick="setRange('1y')">近 1 年</button>
+    <button class="fr" id="frAll_sales" onclick="setRange('all')">全部</button>
+  </div>
+
+  <div class="fsep"></div>
+  <button class="fr" id="frCust" onclick="toggleCustom()">自選日期</button>
+  <div class="ci" id="customInputs">
+    <input type="date" id="dateStart"/>
+    <span style="color:#888;font-size:12px">至</span>
+    <input type="date" id="dateEnd"/>
+    <button onclick="applyCustom()">套用</button>
+  </div>
+  <span class="range-badge" id="rangeBadge"></span>
+</div>
+
+<div class="ct">
+<div id="loadingMsg" class="loading">載入中…</div>
+
+<div class="pg" id="p0">
+  <!-- Row 1: Alltime KPIs -->
+  <div class="g4">
+    <div class="kc">
+      <div class="kl">累計總營收</div>
+      <div class="kv" id="ovAlltime">—</div>
+      <div class="ksub" id="ovAlltimeCnt">—</div>
+    </div>
+    <div class="kc">
+      <div class="kl">累計總訂單</div>
+      <div class="kv2" id="ovAlltimeOrd">—</div>
+      <div class="ksub" id="ovOpDays">—</div>
+    </div>
+    <div class="kc">
+      <div class="kl">全距平均客單</div>
+      <div class="kv2" id="ovAlltimeAvg">—</div>
+    </div>
+    <div class="kc">
+      <div class="kl">總會員數</div>
+      <div class="kv2" id="ovMemTotal">—</div>
+      <div class="ksub" id="ovMemNew">—</div>
+    </div>
+  </div>
+
+  <!-- Row 2: Today realtime -->
+  <div class="card">
+    <div class="ct2">今日 — 即時數據</div>
+    <div class="g4" style="margin-bottom:0;">
+      <div class="kc" style="padding:10px;">
+        <div class="kl">今日營收</div>
+        <div class="kv" id="kRevenue2" style="font-size:17px">—</div>
+        <div class="kt" id="kRevChg2">—</div>
+      </div>
+      <div class="kc" style="padding:10px;">
+        <div class="kl">今日訂單</div>
+        <div class="kv2" id="kOrders2" style="font-size:17px">—</div>
+        <div class="kt" id="kOrdChg2">—</div>
+      </div>
+      <div class="kc" style="padding:10px;">
+        <div class="kl">平均客單</div>
+        <div class="kv2" id="kAvg2" style="font-size:17px">—</div>
+        <div class="kt" id="kAvgChg2">—</div>
+      </div>
+      <div class="kc" style="padding:10px;">
+        <div class="kl">會員率</div>
+        <div class="kv2" id="kMem2" style="font-size:17px">—</div>
+        <div class="kt" id="kMemChg2">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Monthly trend (alltime, no filter) -->
+  <div class="card">
+    <div class="ct2">月度營收（全部）</div>
+    <div class="cw h200"><canvas id="monthlyRevChart"></canvas></div>
+  </div>
+
+  <!-- Row 4: Cross-tab summary -->
+  <div class="g3">
+    <div class="kc">
+      <div class="kl">7 天預測收入</div>
+      <div class="kv2" id="ovFc7day">—</div>
+      <div class="ksub">指數平滑模型估算</div>
+    </div>
+    <div class="kc">
+      <div class="kl">本期 Top 熱銷品</div>
+      <div class="kv3" id="ovTopProd">—</div>
+      <div class="ksub" id="ovTopProdSales">—</div>
+    </div>
+    <div class="kc">
+      <div class="kl">會員活躍率</div>
+      <div class="kv2" id="ovActiveRate">—</div>
+      <div class="ksub">近 30 天有消費</div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p1">
+  <div class="g4">
+    <div class="kc"><div class="kl" id="sLblRev">今日營收</div><div class="kv" id="kRevenue">—</div><div class="kt" id="kRevChg">—</div></div>
+    <div class="kc"><div class="kl" id="sLblOrd">今日訂單</div><div class="kv2" id="kOrders">—</div><div class="kt" id="kOrdChg">—</div></div>
+    <div class="kc"><div class="kl">平均客單價</div><div class="kv2" id="kAvg">—</div><div class="kt" id="kAvgChg">—</div></div>
+    <div class="kc"><div class="kl">會員下單率</div><div class="kv2" id="kMemRate">—</div><div class="kt" id="kMemChg">—</div></div>
+  </div>
+  <div class="card"><div class="ct2">趨勢概覽（MOP）</div><div class="cw h200"><canvas id="rc"></canvas></div></div>
+  <div class="g2">
+    <div class="card"><div class="ct2" id="lblHourly">每小時訂單分佈</div><div class="cw h180"><canvas id="hc"></canvas></div></div>
+    <div class="card">
+      <div class="ct2">品類營收佔比 <span id="catRangeNote" class="range-badge"></span></div>
+      <div class="legend" id="catLegend"></div>
+      <div class="cw h160"><canvas id="catc"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p2">
+  <div class="card">
+    <div class="ct2">熱銷商品排行 <span id="topRangeNote" class="range-badge"></span></div>
+    <div class="cw h280"><canvas id="tpc"></canvas></div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ct2">溫度偏好 <span id="prefNote" class="range-badge"></span></div><div class="cw h160"><canvas id="tc"></canvas></div><div class="pl" id="tl"></div></div>
+    <div class="card"><div class="ct2">甜度偏好</div><div class="cw h160"><canvas id="sc"></canvas></div><div class="pl" id="sl"></div></div>
+    <div class="card"><div class="ct2">選豆偏好</div><div class="cw h160"><canvas id="bc"></canvas></div><div class="pl" id="bl"></div></div>
+  </div>
+</div>
+
+<div class="pg" id="p3">
+  <div class="g2">
+    <div class="card">
+      <div class="ct2">會員等級分佈</div>
+      <div id="lvbars"></div>
+      <div class="sg">
+        <div><div class="sv" style="color:#c47a30" id="mTotal">—</div><div class="slb">總會員數</div></div>
+        <div><div class="sv" style="color:#5a8a5e" id="mNew">—</div><div class="slb">期間新增</div></div>
+        <div><div class="sv" id="mActive">—</div><div class="slb">活躍率</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <div class="card"><div class="ct2">平均客單價對比（按等級）</div><div class="cw h150"><canvas id="lbc_avg"></canvas></div></div>
+      <div class="card"><div class="ct2">月均購買次數對比（按等級）</div><div class="cw h150"><canvas id="lbc_freq"></canvas></div></div>
+    </div>
+  </div>
+  <div class="g21">
+    <div class="card"><div class="ct2">累積會員成長</div><div class="cw h180"><canvas id="mgc"></canvas></div></div>
+    <div class="card">
+      <div class="ct2">會員 vs 訪客</div>
+      <div class="legend" id="mvLegend"></div>
+      <div class="cw h160"><canvas id="mvc"></canvas></div>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:#999">會員貢獻 <span style="color:#c47a30;font-weight:500" id="memRevPct">—</span> 總營收</div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p4">
+  <div class="g3">
+    <div class="fc-kpi"><div class="kl">7天預測總營收</div><div class="kv" id="fc7day">—</div><div class="kt up">▲ 指數平滑模型</div></div>
+    <div class="fc-kpi"><div class="kl">預測最佳日</div><div class="kv2" id="fcBestDay">—</div><div class="kt" style="color:#999" id="fcBestRev">—</div></div>
+    <div class="fc-kpi"><div class="kl">近期可升級會員</div><div class="kv2" style="color:#5a8a5e" id="fcNearUpgrade">—</div><div class="kt up">積分缺口 ≤ 20</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ct2">銷售預測 — 歷史（最近 30 天）+ 未來 14 天預測</div>
+    <div class="legend">
+      <span class="lg-item"><span class="lg-sq" style="background:#5a8a5e"></span>歷史實際值</span>
+      <span class="lg-item"><span class="lg-sq" style="background:#c47a30"></span>預測值</span>
+      <span class="lg-item"><span class="lg-sq" style="background:rgba(196,122,48,0.2);border:1px dashed #c47a30"></span>95% 置信區間</span>
+    </div>
+    <div class="cw h240"><canvas id="rfc"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="ct2">會員升級 ETA</div>
+    <div style="font-size:10px;color:#999;margin-bottom:10px;">基於各等級平均積分缺口 & 消費頻率估算（1 MOP ≈ 1 pt）</div>
+    <div id="upgs" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="ct2">產品需求預測 — 下週</div>
+    <div class="cw h200"><canvas id="dfc"></canvas></div>
+  </div>
+</div>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const A='#c47a30',G='#5a8a5e',B='#4a7ea8',DIM='#7a6555',R='#a84040';
+const GR='rgba(128,128,128,0.12)',TK={color:'#888',font:{size:10}};
+const TP={backgroundColor:'#1a1410',borderColor:'rgba(128,128,128,0.2)',borderWidth:1,titleColor:'#ccc',bodyColor:'#999',padding:10};
+const co={responsive:true,maintainAspectRatio:false};
+const COLS=[A,G,B,DIM,R,'#9b7bb4','#4a9b8a','#c4a030'];
+
+const charts={};
+function mkChart(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),cfg);return charts[id];}
+
+let currentTab = 0;
+let currentRange = '30d';
+
+function updateFilterUI() {
+  ['fr30d','fr1y','frAll','fr1d','fr1y_sales','frAll_sales','frCust'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.classList.remove('act');
+  });
+  if (currentRange === '30d') document.getElementById('fr30d')?.classList.add('act');
+  if (currentRange === '1y') {
+      document.getElementById('fr1y')?.classList.add('act');
+      document.getElementById('fr1y_sales')?.classList.add('act');
+  }
+  if (currentRange === 'all') {
+      document.getElementById('frAll')?.classList.add('act');
+      document.getElementById('frAll_sales')?.classList.add('act');
+  }
+  if (currentRange === '1d') document.getElementById('fr1d')?.classList.add('act');
+  if (currentRange.startsWith('custom|')) document.getElementById('frCust')?.classList.add('act');
+}
+
+function sw(idx){
+  currentTab = idx;
+  document.querySelectorAll('.tb').forEach((t,i)=>t.classList.toggle('act',i===idx));
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('act',i===idx));
+
+  const fbar = document.getElementById('globalFilterBar');
+  const stdOpts = document.getElementById('filterOptionsStandard');
+  const salesOpts = document.getElementById('filterOptionsSales');
+
+  if (!fbar) return;
+
+  if (idx === 4 || idx === 3 || idx === 0) { 
+    fbar.style.display = 'none'; 
+  } else {
+    fbar.style.display = 'flex';
+    if (idx === 1) { 
+      stdOpts.style.display = 'none';
+      salesOpts.style.display = 'flex';
+      if (currentRange === '30d') {
+        setTimeout(() => setRange('1d'), 0); 
+        return;
+      }
+    } else { 
+      stdOpts.style.display = 'flex';
+      salesOpts.style.display = 'none';
+      if (currentRange === '1d') {
+        setTimeout(() => setRange('30d'), 0); 
+        return;
+      }
+    }
+  }
+  updateFilterUI();
+}
+
+function setRange(r){
+  currentRange = r;
+  document.getElementById('customInputs').classList.remove('show');
+  updateFilterUI();
+  loadData();
+}
+
+function toggleCustom(){
+  const el=document.getElementById('customInputs');
+  el.classList.toggle('show');
+  if(el.classList.contains('show')){
+    const t=new Date(),d=new Date();d.setDate(t.getDate()-30);
+    document.getElementById('dateEnd').value=t.toISOString().slice(0,10);
+    document.getElementById('dateStart').value=d.toISOString().slice(0,10);
+  }
+}
+
+function applyCustom(){
+  const s=document.getElementById('dateStart').value,e=document.getElementById('dateEnd').value;
+  if(!s||!e){alert('請選擇日期');return;}
+  if(s>e){alert('開始日期不能晚於結束日期');return;}
+  currentRange=`custom|${s}|${e}`;
+  updateFilterUI();
+  loadData();
+}
+
+function buildUrl(){
+  if(currentRange.startsWith('custom|')){
+    const[,s,e]=currentRange.split('|');
+    return `/api/dashboard/data/?range=custom&start=${s}&end=${e}`;
+  }
+  return `/api/dashboard/data/?range=${currentRange}`;
+}
+
+function chg(val){
+  if(val===null||val===undefined) return '<span class="kt na">暫無比較</span>';
+  return `<span class="kt ${val>=0?'up':'dn'}">${val>=0?'▲':'▼'} ${Math.abs(val)}% vs 昨日</span>`;
+}
+function mkDonut(cid,lid,data){
+  if(!data||!data.length)return;
+  mkChart(cid,{type:'doughnut',
+    data:{labels:data.map(d=>d.n),datasets:[{data:data.map(d=>d.v),backgroundColor:COLS,borderColor:'transparent',borderWidth:0}]},
+    options:{...co,cutout:'58%',plugins:{legend:{display:false},tooltip:{...TP,callbacks:{label:c=>`${c.parsed}%`}}}}});
+  const el=document.getElementById(lid);
+  el.innerHTML='';
+  data.forEach((d,i)=>{el.innerHTML+=`<div class="pr"><span class="pd"><span class="pdt" style="background:${COLS[i]}"></span>${d.n}</span><span style="font-size:11px;font-weight:500">${d.v}%</span></div>`;});
+}
+
+function initDashboard(d){
+  const now=new Date();
+  document.getElementById('lastUpdated').textContent=
+    `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  const rl=d.range.label;
+  document.getElementById('rangeBadge').textContent=`（${rl}）`;
+  ['catRangeNote','topRangeNote','prefNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=rl;});
+
+  const k=d.kpi;
+  const ov=d.overall;
+
+  // ── Sales KPIs 動態標題切換 ──
+  const sIsDay = (currentRange === '1d');
+  const sPrefix = sIsDay ? '今日' : '期間';
+  
+  const elRev = document.getElementById('sLblRev'); if(elRev) elRev.textContent = sPrefix + '營收';
+  const elOrd = document.getElementById('sLblOrd'); if(elOrd) elOrd.textContent = sPrefix + '訂單';
+  const elHrly = document.getElementById('lblHourly'); if(elHrly) elHrly.textContent = sIsDay ? '每小時訂單分佈（今日）' : `每小時訂單分佈（${rl}）`;
+
+  const sRevVal = sIsDay ? k.today_rev : (ov.period_rev || 0);
+  const sOrdVal = sIsDay ? k.today_orders : (ov.period_cnt || 0);
+  const sAvgVal = sIsDay ? k.today_avg : (ov.period_avg || 0);
+
+  const kVals=[`MOP ${sRevVal.toLocaleString()}`,`${sOrdVal} 單`,`MOP ${sAvgVal.toFixed(1)}`,`${k.member_rate}%`];
+  // Sales tab KPIs (filter-dependent)
+  ['kRevenue','kOrders','kAvg','kMemRate'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=kVals[i];});
+
+  // Fix 5: Overview 今日即時數據 always uses today's actual data regardless of filter
+  const todayVals=[`MOP ${(k.today_rev||0).toLocaleString()}`,`${k.today_orders||0} 單`,`MOP ${(k.today_avg||0).toFixed(1)}`,`${k.member_rate}%`];
+  ['kRevenue2','kOrders2','kAvg2','kMem2'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=todayVals[i];});
+
+  ['kRevChg','kOrdChg','kAvgChg','kMemChg'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.display = sIsDay ? 'block' : 'none';
+  });
+  
+  const chgPairs=[['kRevChg',k.rev_chg],['kOrdChg',k.orders_chg],['kAvgChg',k.avg_chg],['kMemChg',k.mem_rate_chg]];
+  chgPairs.forEach(([a,v])=>{const el=document.getElementById(a);if(el)el.innerHTML=chg(v);});
+  // Overview today change badges always reflect today vs yesterday
+  const chgPairs2=[['kRevChg2',k.rev_chg],['kOrdChg2',k.orders_chg],['kAvgChg2',k.avg_chg],['kMemChg2',k.mem_rate_chg]];
+  chgPairs2.forEach(([id,v])=>{const el=document.getElementById(id);if(el){el.innerHTML=chg(v);el.style.display='block';}});
+
+  // ── Overview (alltime snapshot, no filter) ──
+  document.getElementById('ovAlltime').textContent=`MOP ${ov.alltime_rev.toLocaleString()}`;
+  document.getElementById('ovAlltimeCnt').textContent=`共 ${ov.alltime_cnt} 單`;
+  document.getElementById('ovAlltimeOrd').textContent=`${ov.alltime_cnt} 單`;
+  document.getElementById('ovOpDays').textContent=`${ov.operating_days} 個營業日`;
+  const alltimeAvg = ov.alltime_cnt > 0 ? (ov.alltime_rev / ov.alltime_cnt).toFixed(1) : '—';
+  document.getElementById('ovAlltimeAvg').textContent=`MOP ${alltimeAvg}`;
+  const mem=d.members;
+  document.getElementById('ovMemTotal').textContent=mem.total;
+  document.getElementById('ovMemNew').textContent=`本月新增 +${mem.new_month}`;
+  // Cross-tab summary
+  document.getElementById('ovFc7day').textContent=`MOP ${d.forecast.fc_7day.toLocaleString()}`;
+  if(d.top_products&&d.top_products.length){
+    document.getElementById('ovTopProd').textContent=d.top_products[0].name;
+    document.getElementById('ovTopProdSales').textContent=`${d.top_products[0].sales} 杯（本期）`;
+  }
+  document.getElementById('ovActiveRate').textContent=`${mem.active_rate}%`;
+
+  if(ov.monthly_rev.length){
+    mkChart('monthlyRevChart',{type:'bar',
+      data:{labels:ov.monthly_rev.map(r=>r.m),
+            datasets:[{label:'月營收',data:ov.monthly_rev.map(r=>r.rev),
+              backgroundColor:A+'CC',borderRadius:5,
+              hoverBackgroundColor:A}]},
+      options:{...co,plugins:{legend:{display:false},
+        tooltip:{...TP,callbacks:{label:c=>`MOP ${c.parsed.y.toLocaleString()} (${ov.monthly_rev[c.dataIndex].cnt} 單)`}}},
+        scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{color:GR},ticks:TK}}}});
+  }
+
+  // ── Sales Charts ──
+  mkChart('rc',{type:'line',
+    data:{labels:d.days30.map(x=>x.date),
+          datasets:[{label:'Revenue',data:d.days30.map(x=>x.rev),
+            borderColor:A,backgroundColor:'rgba(196,122,48,0.1)',fill:true,tension:0.4,pointRadius:0,borderWidth:2}]},
+    options:{...co,plugins:{legend:{display:false},tooltip:{...TP,mode:'index',intersect:false,callbacks:{label:c=>`MOP ${c.parsed.y.toLocaleString()}`}}},
+      scales:{x:{grid:{color:GR},ticks:{...TK,maxTicksLimit:10}},y:{grid:{color:GR},ticks:TK}}}});
+
+  const maxH=Math.max(...d.hourly.map(h=>h.n),1);
+  mkChart('hc',{type:'bar',
+    data:{labels:d.hourly.map(h=>h.h+':00'),
+          datasets:[{label:'訂單',data:d.hourly.map(h=>h.n),
+            backgroundColor:d.hourly.map(h=>h.n>=maxH*0.8?A:DIM+'88'),borderRadius:4}]},
+    options:{...co,plugins:{legend:{display:false},tooltip:TP},
+      scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{color:GR},ticks:TK}}}});
+
+  const catColors=[A,G,B,DIM];
+  document.getElementById('catLegend').innerHTML='';
+  d.cat_data.forEach((c,i)=>{document.getElementById('catLegend').innerHTML+=`<span class="lg-item"><span class="lg-sq" style="background:${catColors[i]||DIM}"></span>${c.name} ${c.pct}%</span>`;});
+  mkChart('catc',{type:'doughnut',
+    data:{labels:d.cat_data.map(c=>c.name),datasets:[{data:d.cat_data.map(c=>c.pct),backgroundColor:catColors,borderColor:'transparent',borderWidth:0}]},
+    options:{...co,cutout:'60%',plugins:{legend:{display:false},tooltip:{...TP,callbacks:{label:c=>`${c.label}: ${c.parsed}%`}}}}});
+
+  // ── Products ──
+  if(d.top_products.length){
+    mkChart('tpc',{type:'bar',
+      data:{labels:d.top_products.map(p=>p.name),datasets:[{label:'銷量',data:d.top_products.map(p=>p.sales),
+        backgroundColor:d.top_products.map((_,i)=>i===0?A:DIM+'99'),borderRadius:4}]},
+      options:{...co,indexAxis:'y',plugins:{legend:{display:false},tooltip:TP},
+        scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{display:false},ticks:TK}}}});
+  }
+  mkDonut('tc','tl',d.prefs.temp);
+  mkDonut('sc','sl',d.prefs.sugar);
+  mkDonut('bc','bl',d.prefs.bean);
+
+  // ── Members ──
+  const m=d.members;
+  document.getElementById('lvbars').innerHTML='';
+  m.levels.forEach(l=>{
+    const pct=Math.round(l.count/(m.total||1)*100);
+    document.getElementById('lvbars').innerHTML+=`<div class="lr"><div class="lm"><span>${l.name}</span><span class="lc">${l.count} 人 · ${pct}%</span></div><div class="lbb"><div class="lb" style="width:${pct}%;background:${l.col}"></div></div></div>`;
+  });
+  document.getElementById('mTotal').textContent=m.total;
+  document.getElementById('mNew').textContent=`+${m.new_month}`;
+  document.getElementById('mActive').textContent=`${m.active_rate}%`;
+
+  // Fix 4: Separate charts for avg spend and purchase frequency
+  mkChart('lbc_avg',{type:'bar',
+    data:{labels:m.spend_data.map(s=>s.lv),
+          datasets:[{label:'平均客單價',data:m.spend_data.map(s=>s.avg),backgroundColor:A,borderRadius:4}]},
+    options:{...co,plugins:{legend:{labels:{color:'#999',font:{size:10},boxWidth:10}},
+      tooltip:{...TP,callbacks:{label:c=>`MOP ${c.parsed.y}`}}},
+      scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{color:GR},ticks:TK}}}});
+
+  mkChart('lbc_freq',{type:'bar',
+    data:{labels:m.spend_data.map(s=>s.lv),
+          datasets:[{label:'月均購買次數',data:m.spend_data.map(s=>s.freq),backgroundColor:G+'BB',borderRadius:4}]},
+    options:{...co,plugins:{legend:{labels:{color:'#999',font:{size:10},boxWidth:10}},
+      tooltip:{...TP,callbacks:{label:c=>`${c.parsed.y.toFixed(1)} 次`}}},
+      scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{color:GR},ticks:TK}}}});
+
+  mkChart('mgc',{type:'bar',
+    data:{labels:m.growth.map(g=>g.m),
+          datasets:[{label:'新增',data:m.growth.map(g=>g.new),backgroundColor:A+'BB',borderRadius:4,yAxisID:'y'},
+                    {label:'累積',data:m.growth.map(g=>g.total),type:'line',borderColor:G,
+                     backgroundColor:'rgba(90,138,94,0.08)',fill:true,tension:0.4,pointRadius:0,borderWidth:2,yAxisID:'y1'}]},
+    options:{...co,plugins:{legend:{labels:{color:'#999',font:{size:10},boxWidth:10}},tooltip:TP},
+      scales:{x:{grid:{color:GR},ticks:TK},y:{grid:{color:GR},ticks:TK,position:'left'},
+              y1:{ticks:TK,position:'right',grid:{display:false}}}}});
+
+  document.getElementById('mvLegend').innerHTML=
+    `<span class="lg-item"><span class="lg-sq" style="background:${A}"></span>會員 ${m.mem_pct}%</span>
+     <span class="lg-item"><span class="lg-sq" style="background:${DIM}"></span>訪客 ${100-m.mem_pct}%</span>`;
+  document.getElementById('memRevPct').textContent=`${m.mem_rev_pct}%`;
+  mkChart('mvc',{type:'doughnut',
+    data:{labels:['會員','訪客'],datasets:[{data:[m.mem_pct,100-m.mem_pct],backgroundColor:[A,DIM],borderColor:'transparent',borderWidth:0}]},
+    options:{...co,cutout:'62%',plugins:{legend:{display:false},tooltip:{...TP,callbacks:{label:c=>`${c.parsed}%`}}}}});
+
+  // ── Forecast ──
+  const fc=d.forecast;
+  document.getElementById('fc7day').textContent=`MOP ${fc.fc_7day.toLocaleString()}`;
+  // Fix 6: recompute best day from the actual forecast data displayed in chart
+  const bestIdx=fc.fc_pred.indexOf(Math.max(...fc.fc_pred));
+  const bestDayLabel=fc.fc_labels[bestIdx]||fc.best_day||'—';
+  const bestDayRev=fc.fc_pred[bestIdx];
+  document.getElementById('fcBestDay').textContent=bestDayLabel;
+  document.getElementById('fcBestRev').textContent=bestDayRev?`預計 MOP ${bestDayRev.toLocaleString()}`:'—';
+  document.getElementById('fcNearUpgrade').textContent=`${fc.near_upgrade} 人`;
+
+  const allLbls=[...fc.hist_labels,...fc.fc_labels];
+  const histDt=[...fc.hist_rev,...new Array(14).fill(null)];
+  const predDt=[...new Array(fc.hist_labels.length).fill(null),...fc.fc_pred];
+  const lowDt =[...new Array(fc.hist_labels.length).fill(null),...fc.fc_low];
+  const highDt=[...new Array(fc.hist_labels.length).fill(null),...fc.fc_high];
+
+  mkChart('rfc',{type:'line',
+    data:{labels:allLbls,datasets:[
+      {label:'Lower CI',data:lowDt,borderColor:'transparent',backgroundColor:'rgba(196,122,48,0.12)',fill:false,pointRadius:0,tension:0.4,order:1},
+      {label:'Upper CI',data:highDt,borderColor:'transparent',backgroundColor:'rgba(196,122,48,0.12)',fill:'-1',pointRadius:0,tension:0.4,order:1},
+      {label:'預測值',data:predDt,borderColor:A,borderWidth:2,borderDash:[5,4],fill:false,pointRadius:3,pointBackgroundColor:A,tension:0.4,order:0},
+      {label:'歷史實際',data:histDt,borderColor:G,borderWidth:2,fill:false,pointRadius:0,tension:0.4,order:0},
+    ]},
+    options:{...co,plugins:{legend:{display:false},tooltip:{...TP,mode:'index',intersect:false}},
+      scales:{x:{grid:{color:GR},ticks:{...TK,maxTicksLimit:14}},y:{grid:{color:GR},ticks:TK}}}});
+
+  document.getElementById('upgs').innerHTML='';
+  fc.upgrade_data.forEach(u=>{
+    document.getElementById('upgs').innerHTML+=`<div class="upg-card">
+      <div class="upg-m"><span class="upg-lv">${u.from} → ${u.to}<span style="font-size:10px;color:#999;font-weight:400;margin-left:6px">${u.count} 人</span></span>
+      <span class="upg-eta">約 ${u.weekly_earn>0?(u.avg_gap/u.weekly_earn).toFixed(1):'—'} 週</span></div>
+      <div class="upg-det">均 ${u.avg_pts} 積分 · 缺 ${u.avg_gap} 分 · 週均賺 ${u.weekly_earn} 分</div>
+      <div class="upg-bb"><div class="upg-b" style="width:${u.pct}%;background:${u.col}"></div></div></div>`;
+  });
+
+  if(fc.demand_fc.length){
+    mkChart('dfc',{type:'bar',
+      data:{labels:fc.demand_fc.map(x=>x.name),datasets:[{label:'預測銷量',data:fc.demand_fc.map(x=>x.pred),
+        backgroundColor:fc.demand_fc.map(x=>x.trend==='up'?A:DIM+'99'),borderRadius:4}]},
+      options:{...co,plugins:{legend:{display:false},tooltip:{...TP,callbacks:{label:c=>`預測 ${c.parsed.y} 杯`}}},
+        scales:{x:{grid:{display:false},ticks:TK},y:{grid:{color:GR},ticks:TK}}}});
+  }
+
+  document.getElementById('loadingMsg').style.display='none';
+  sw(currentTab);
+}
+
+function loadData(){
+  document.getElementById('loadingMsg').style.display='block';
+  document.getElementById('loadingMsg').textContent='載入中…';
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  fetch(buildUrl())
+    .then(r=>r.json())
+    .then(data=>initDashboard(data))
+    .catch(err=>{
+      document.getElementById('loadingMsg').textContent='數據載入失敗，請確認後端服務正常。';
+      console.error(err);
+    });
+}
+
+loadData();
+</script>
+{% endblock %}

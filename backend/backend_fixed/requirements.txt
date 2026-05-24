@@ -1,0 +1,15 @@
+Django>=4.2,<5.0
+mysqlclient
+PyMySQL
+requests
+gunicorn
+django-simpleui
+Pillow
+django-cors-headers
+whitenoise
+djangorestframework
+django-storages
+cos-python-sdk-v5
+pandas>=2.0.0
+scikit-learn>=1.0.0
+numpy>=1.20.0

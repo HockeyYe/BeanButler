@@ -1,0 +1,67 @@
+<view class="order-container">
+  
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" data-tab="0" bindtap="switchTab">
+      <text>進行中</text>
+      <view class="tab-line" wx:if="{{currentTab === 0}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" data-tab="1" bindtap="switchTab">
+      <text>歷史</text>
+      <view class="tab-line" wx:if="{{currentTab === 1}}"></view>
+    </view>
+  </view>
+
+  <scroll-view class="order-list" scroll-y enhanced show-scrollbar="{{false}}">
+    
+    <block wx:if="{{!hasLogin}}">
+      <view class="empty-state login-prompt">
+        <text class="prompt-text">請先登錄以查看訂單紀錄</text>
+        <button class="btn-login-black" bindtap="goToLogin">去登錄</button>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view wx:if="{{filteredOrders.length === 0}}" class="empty-state">暫無相關訂單</view>
+
+      <view wx:for="{{filteredOrders}}" wx:key="id" class="order-card" bindtap="goToDetail" data-order="{{item}}">
+        <view class="card-header">
+          <view class="header-left">
+            <view class="primary-info">
+              <text class="info-label">{{item.pickupCode ? '取餐碼' : '訂單號'}}</text>
+              <text class="info-val">{{item.pickupCode || item.orderNo}}</text>
+            </view>
+            <text class="order-time">{{item.createTime}}</text>
+          </view>
+          
+          <view class="header-right">
+            <text class="status-tag" style="background:{{item.status_color}};">{{item.status_label}}</text>
+          </view>
+        </view>
+
+        <view class="divider"></view>
+
+        <view class="card-body">
+          <scroll-view class="image-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+            <block wx:if="{{item.items && item.items.length > 0}}">
+              <image wx:for="{{item.items}}" wx:for-item="prod" wx:key="index" class="thumbnail" src="{{prod.image || '/images/americano.jpg'}}" mode="aspectFill"></image>
+            </block>
+            <block wx:else>
+              <image class="thumbnail" src="{{item.image || '/images/americano.jpg'}}" mode="aspectFill"></image>
+            </block>
+          </scroll-view>
+        </view>
+
+        <view class="divider"></view>
+
+        <view class="card-footer">
+          <text class="total-items">共 {{item.totalItems}} 件商品</text>
+          <view class="price-wrap">
+            <text class="price-label">實付</text>
+            <text class="price-val">MOP {{item.amount}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+  </scroll-view>
+</view>

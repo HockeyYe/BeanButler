@@ -9,6 +9,8 @@
 
 ## [未发布]
 
+## [0.2.0] - 2026-05-25
+
 ### 新增
 - 新增 `ai_assistant` Django app。
 - 新增 `POST /api/ai/order-assistant/` AI 智能点单接口。

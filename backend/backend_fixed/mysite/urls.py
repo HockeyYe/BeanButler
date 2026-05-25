@@ -15,6 +15,7 @@ from members.views import wechat_login, member_info, update_member_profile, uplo
 from demo_orders.views import product_list, create_order, order_list, recommendations
 from feedback.views import feedback_list
 from coupons.views import coupon_list, redeem_options, redeem_coupon
+from ai_assistant.views import order_assistant
 
 urlpatterns = [
     # 根路徑直接跳轉到 admin 登入頁
@@ -42,6 +43,7 @@ urlpatterns = [
     path('api/coupons/', coupon_list),
     path('api/coupons/options/', redeem_options),
     path('api/coupons/redeem/', redeem_coupon),
+    path('api/ai/order-assistant/', order_assistant),
     
     # 修正：直接使用 upload_avatar 函數
     path('api/upload_avatar/', upload_avatar, name='upload_avatar'),

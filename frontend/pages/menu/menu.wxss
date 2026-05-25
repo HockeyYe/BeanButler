@@ -94,6 +94,52 @@ page {
   font-weight: 700;
 }
 
+.ai-test-strip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 24rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  background: #FFFFFF;
+}
+
+.ai-test-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  padding-right: 20rpx;
+}
+
+.ai-test-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #111111;
+}
+
+.ai-test-desc {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #888888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-test-btn {
+  width: 132rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  padding: 0;
+  margin: 0;
+  border-radius: 8rpx;
+  background: #000000;
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
 /* ================= 主体左右分区 ================= */
 .menu-container {
   display: flex;

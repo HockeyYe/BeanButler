@@ -146,17 +146,17 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 开发任务
 
-- [ ] 新建 Django app：`ai_assistant`
-- [ ] 配置 `INSTALLED_APPS`
-- [ ] 新建接口：`POST /api/ai/order-assistant/`
-- [ ] 接口先返回 mock JSON
-- [ ] 小程序能请求该接口
-- [ ] 小程序端打印返回结果
+- [x] 新建 Django app：`ai_assistant`
+- [x] 配置 `INSTALLED_APPS`
+- [x] 新建接口：`POST /api/ai/order-assistant/`
+- [x] 接口先返回 mock JSON
+- [x] 小程序能请求该接口
+- [x] 小程序端打印返回结果
 
 ### 产品/学习任务
 
-- [ ] 学习 AI 点单接口输入输出设计
-- [ ] 写 AI 点单接口字段草稿
+- [x] 学习 AI 点单接口输入输出设计
+- [x] 写 AI 点单接口字段草稿
 
 ### 推荐 Codex Prompt
 
@@ -166,18 +166,23 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 验收标准
 
-- [ ] 小程序请求 AI 点单接口成功
-- [ ] 后端返回结构化 mock 数据
-- [ ] 无 404 / 500 错误
+- [x] 小程序请求 AI 点单接口成功
+- [x] 后端返回结构化 mock 数据
+- [x] 无 404 / 500 错误
 
 ### 今日记录
 
 ```text
 完成内容：
+新建 `ai_assistant` Django app，注册到 `INSTALLED_APPS`，新增 `POST /api/ai/order-assistant/`。
+菜单页增加最小 AI 测试入口，能够请求接口并在控制台打印返回结果。
+接口统一返回 `success`、`data`、`message`、`error_code` 结构。
 
 遇到问题：
+需要先明确登录要求、fallback 规则、字段格式和前端测试入口位置，避免直接写代码后返工。
 
 明日重点：
+在 mock 接口基础上接入 DeepSeek，并将用户输入和真实商品菜单拼接成 Prompt。
 ```
 
 ---
@@ -186,17 +191,17 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 开发任务
 
-- [ ] 在 `.env` 或环境变量中配置 AI API Key
-- [ ] 后端封装 AI 调用函数
-- [ ] `order-assistant` 接口接收 `user_input`
-- [ ] 后端读取商品菜单数据
-- [ ] 将用户输入 + 商品菜单拼接为 Prompt
-- [ ] 调用 AI API 返回推荐文本
+- [x] 在 `.env` 或环境变量中配置 AI API Key
+- [x] 后端封装 AI 调用函数
+- [x] `order-assistant` 接口接收 `user_input`
+- [x] 后端读取商品菜单数据
+- [x] 将用户输入 + 商品菜单拼接为 Prompt
+- [x] 调用 AI API 返回推荐文本
 
 ### 产品/学习任务
 
-- [ ] 学习 Prompt 基础结构：角色、任务、约束、输出格式
-- [ ] 写 AI 点单用户流程：输入 → 推荐 → 加购
+- [x] 学习 Prompt 基础结构：角色、任务、约束、输出格式
+- [x] 写 AI 点单用户流程：输入 → 推荐 → 加购
 
 ### 推荐 Codex Prompt
 
@@ -206,18 +211,23 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 验收标准
 
-- [ ] 后端能成功调用 AI API
-- [ ] 用户输入一句话后，AI 能返回推荐内容
-- [ ] API Key 没有写死在代码里
+- [x] 后端能成功调用 AI API
+- [x] 用户输入一句话后，AI 能返回推荐内容
+- [x] API Key 没有写死在代码里
 
 ### 今日记录
 
 ```text
 完成内容：
+接入 DeepSeek `deepseek-v4-flash`，API Key 从本地 `.env` 读取。
+后端封装 AI 调用 service，读取商品表中的可售商品，生成菜单上下文并拼接 Prompt。
+用户输入一句话后，后端可以调用 DeepSeek 返回推荐内容。
 
 遇到问题：
+真实 API Key 不能进入仓库；本地 `.env` 已被 `.gitignore` 忽略，只在本机保存真实密钥。
 
 明日重点：
+继续约束 DeepSeek 只返回 JSON，并校验推荐结果中的 `product_id` 是否能匹配真实商品。
 ```
 
 ---
@@ -226,16 +236,16 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 开发任务
 
-- [ ] 优化 Prompt，要求 AI 只返回 JSON
-- [ ] 设计返回字段：`intent`、`recommendations`、`reason`、`options`
-- [ ] 后端解析 AI 返回 JSON
-- [ ] 校验 `product_id` 是否存在
-- [ ] 增加 AI 返回异常时的 fallback
+- [x] 优化 Prompt，要求 AI 只返回 JSON
+- [x] 设计返回字段：`intent`、`recommendations`、`reason`、`options`
+- [x] 后端解析 AI 返回 JSON
+- [x] 校验 `product_id` 是否存在
+- [x] 增加 AI 返回异常时的 fallback
 
 ### 产品/学习任务
 
-- [ ] 学习 structured output / JSON 输出控制
-- [ ] 写推荐结果字段说明
+- [x] 学习 structured output / JSON 输出控制
+- [x] 写推荐结果字段说明
 
 ### 推荐 Codex Prompt
 
@@ -245,19 +255,24 @@ AI API（DeepSeek / 通义千问 / OpenAI 等）
 
 ### 验收标准
 
-- [ ] AI 返回结果不再是散乱自然语言
-- [ ] 后端能解析 JSON
-- [ ] product_id 能与数据库商品匹配
-- [ ] AI 异常不会导致系统崩溃
+- [x] AI 返回结果不再是散乱自然语言
+- [x] 后端能解析 JSON
+- [x] product_id 能与数据库商品匹配
+- [x] AI 异常不会导致系统崩溃
 
 ### 今日记录
 
 ```text
 完成内容：
+优化 Prompt 要求 DeepSeek 输出固定 JSON。
+后端解析 JSON，过滤不存在或不可售的 `product_id`，并以后端商品表名称为准返回推荐。
+增加 fallback：AI 未配置、超时、非法 JSON、推荐商品不匹配时，返回基于历史推荐/热门商品/推荐商品的保底结果。
 
 遇到问题：
+AI 输出可能不稳定，可能返回非法 JSON 或编造商品 ID；通过 JSON 解析、商品 ID 校验和 fallback 避免接口 500。
 
 明日重点：
+进入 Day 6，做正式 AI 点单页面：输入框、发送按钮、loading、推荐商品卡片和 fallback 提示展示。
 ```
 
 ---

@@ -33,6 +33,21 @@
   </scroll-view>
 </view>
 
+<view class="ai-test-strip">
+  <view class="ai-test-copy">
+    <text class="ai-test-title">AI 点单接口测试</text>
+    <text class="ai-test-desc">固定测试：冰的、低糖、不要牛奶</text>
+  </view>
+  <button
+    class="ai-test-btn"
+    loading="{{aiTestLoading}}"
+    disabled="{{aiTestLoading}}"
+    bindtap="runAiOrderTest"
+  >
+    测试
+  </button>
+</view>
+
 <!-- 下方才开始左右分区 -->
 <view class="menu-container">
   <!-- 左侧分类 -->

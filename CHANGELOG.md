@@ -9,6 +9,22 @@
 
 ## [未发布]
 
+### 新增
+- 新增 `ai_assistant` Django app。
+- 新增 `POST /api/ai/order-assistant/` AI 智能点单接口。
+- 接入 DeepSeek `deepseek-v4-flash`，API Key 从后端 `.env` / 环境变量读取。
+- 新增 AI 点单 Prompt、JSON 解析、真实商品 `product_id` 校验和 fallback 推荐逻辑。
+- 菜单页新增最小 AI 点单接口测试入口。
+- 新增 `AI_Order_Assistant_Day3-5_PRD.md` 和 `AI_Order_Assistant_Day3-5_Dev_Record.md`，记录需求、接口和测试结果。
+
+### 变更
+- `.env.example` 增加 DeepSeek 相关环境变量占位配置。
+- README 增加 AI 点单接口说明和环境变量说明。
+
+### 验证
+- 已通过小程序菜单页测试入口成功调用 AI 接口。
+- 已确认真实 API Key 只写入本地 `.env`，未进入 Git 状态。
+
 ## [0.1.0] - 2026-05-24
 
 ### 新增

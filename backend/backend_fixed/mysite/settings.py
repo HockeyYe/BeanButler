@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'staff',
     'analytics',
     'coupons',
+    'ai_assistant',
 ]
 
 MIDDLEWARE = [

@@ -37,6 +37,7 @@ Page({
     menuList: [],
 
     isLoading: true,
+    aiTestLoading: false,
 
     aiRecs: [],
     aiRecSource: '',
@@ -144,6 +145,52 @@ Page({
         }
       })
       .catch(() => {});
+  },
+
+  runAiOrderTest() {
+    const user = app.globalData.userInfo || wx.getStorageSync('userInfo') || {};
+    const memberId = user.member_id;
+
+    if (!app.globalData.hasLogin || !memberId) {
+      wx.showModal({
+        title: '请先登录',
+        content: '登录后即可使用 AI 点单助手',
+        confirmText: '去登录',
+        success: res => {
+          if (res.confirm) wx.navigateTo({ url: '/pages/login/login' });
+        }
+      });
+      return;
+    }
+
+    this.setData({ aiTestLoading: true });
+    request('/api/ai/order-assistant/', 'POST', {
+      user_input: '我想喝冰的、低糖、不要牛奶的咖啡',
+      user_id: memberId
+    })
+      .then(res => {
+        console.log('AI 点单测试返回:', res);
+
+        if (res && res.error_code === 'LOGIN_REQUIRED') {
+          wx.navigateTo({ url: '/pages/login/login' });
+          return;
+        }
+
+        const recommendations = (res && res.data && res.data.recommendations) || [];
+        const names = recommendations.map(item => item.product_name).join('、');
+        wx.showModal({
+          title: res && res.success ? 'AI 测试成功' : 'AI 测试结果',
+          content: names ? `${res.message || '接口已返回'}\n推荐：${names}` : (res && res.message) || '暂无推荐结果',
+          showCancel: false
+        });
+      })
+      .catch(err => {
+        console.error('AI 点单测试失败:', err);
+        wx.showToast({ title: 'AI 测试失败', icon: 'none' });
+      })
+      .finally(() => {
+        this.setData({ aiTestLoading: false });
+      });
   },
 
   // 組建菜單分類結構

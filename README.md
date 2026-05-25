@@ -61,6 +61,48 @@ BeanButler 是一个面向咖啡店场景的点单与后台管理系统，包含
 - 商品、库存、会员、反馈、优惠券后台管理
 - 销售数据看板
 - 基于历史订单的推荐功能
+- AI 智能点单接口：支持自然语言需求、DeepSeek 调用、结构化 JSON 推荐、真实商品 `product_id` 校验和 fallback 推荐
+
+## AI 点单接口
+
+当前已新增 AI 点单后端接口：
+
+```text
+POST /api/ai/order-assistant/
+```
+
+请求示例：
+
+```json
+{
+  "user_input": "我想喝冰的、低糖、不要牛奶的咖啡",
+  "user_id": 1
+}
+```
+
+返回结构统一为：
+
+```json
+{
+  "success": true,
+  "data": {
+    "intent": "recommend_drink",
+    "recommendations": [],
+    "follow_up_question": "",
+    "is_fallback": false
+  },
+  "message": "推荐成功",
+  "error_code": null
+}
+```
+
+说明：
+
+- AI 服务商：DeepSeek。
+- 默认模型：`deepseek-v4-flash`。
+- API Key 只从后端环境变量读取。
+- AI 推荐必须匹配真实可售商品 `product_id`。
+- AI 超时、非法 JSON 或推荐商品不匹配时，会返回基于历史数据和当前商品销售热度的 fallback 推荐。
 
 ## 本地运行后端
 
@@ -135,6 +177,10 @@ DB_PASSWORD=change_me
 DJANGO_SECRET_KEY=change_me
 WECHAT_APP_ID=change_me
 WECHAT_APP_SECRET=change_me
+DEEPSEEK_API_KEY=change_me
+DEEPSEEK_API_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_TIMEOUT_SECONDS=20
 ```
 
 注意：真实 `.env` 不应提交到 GitHub。

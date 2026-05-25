@@ -23,8 +23,3 @@
 
 ### 修复
 - 修复迁移到本地 Django 后微信登录返回 `"invalid code"` 的问题。原因为硬编码的 AppID 与小程序实际的 AppID（`wx84347eb28e2473c4`）不一致，导致 `jscode2session` 拒绝授权码。
-
----
-
-[未发布]: https://github.com/HockeyYe/Fullstack/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/HockeyYe/Fullstack/releases/tag/v0.1.0

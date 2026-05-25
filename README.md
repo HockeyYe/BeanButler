@@ -211,3 +211,7 @@ DEEPSEEK_TIMEOUT_SECONDS=20
 - 使用 DRF Serializer 统一 API 参数校验和返回结构。
 - 补充接口测试，避免前后端接口不一致。
 - 将业务逻辑从 `views.py` 和 `admin.py` 中逐步抽离到 service 层。
+
+## 变更记录
+
+项目更新历史见 [CHANGELOG.md](CHANGELOG.md)。

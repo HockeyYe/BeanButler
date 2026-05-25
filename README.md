@@ -24,6 +24,10 @@ BeanButler 是一个面向咖啡店场景的点单与后台管理系统，包含
 │   ├── requirements.txt         # Python 依赖
 │   └── .env.example             # 本地环境变量示例
 │
+├── docs/
+│   ├── requirements/            # PRD、TODO 与需求规划文档
+│   └── dev-records/             # 阶段开发记录、接口记录与测试记录
+│
 ├── .gitignore                   # Git 忽略规则
 ├── .gitattributes               # Git 文件类型与换行规则
 └── CLEANUP_STEPS.md             # 项目清理与本地重建说明

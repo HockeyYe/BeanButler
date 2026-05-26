@@ -119,8 +119,7 @@ Page({
       });
   },
 
-  // 拉取 AI 推薦
-,
+  // AI 点单入口
 
   goToAiOrder() {
     wx.navigateTo({ url: '/pages/ai-order/ai-order' });

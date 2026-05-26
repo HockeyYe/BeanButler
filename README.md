@@ -2,6 +2,11 @@
 
 BeanButler 是一个面向咖啡店场景的点单与后台管理系统，包含微信小程序前端和 Django 后端。项目支持商品浏览、购物车、会员登录、下单、优惠券、反馈留言、后台订单处理、库存维护、会员管理、数据看板和推荐功能。
 
+## 当前进度（截至 2026-05-26）
+
+- 原有点单主流程可用：商品列表 → 规格选择 → 加入购物车 → 下单 → 订单查询
+- AI 智能点单 MVP 已接入：小程序 `menu` 页入口 → `ai-order` 页面输入一句话 → 后端 `/api/ai/order-assistant/` 返回 1-3 个结构化推荐
+
 ## 项目结构
 
 ```text
@@ -98,6 +103,28 @@ POST /api/ai/order-assistant/
   "message": "推荐成功",
   "error_code": null
 }
+```
+
+常见错误响应（`success=false`）：
+
+- `LOGIN_REQUIRED`：未登录或 member 不存在
+- `INVALID_INPUT`：`user_input` 为空或请求体非法
+- `MENU_EMPTY`：当前无可推荐商品
+- `OUT_OF_SCOPE`：输入与点单/饮品无关
+
+## 接口请求示例（本地）
+
+PowerShell：
+
+```powershell
+$body = @{ user_input = "我想喝冰的、低糖、不要牛奶的咖啡"; user_id = 1 } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/api/ai/order-assistant/" -ContentType "application/json" -Body $body
+```
+
+curl：
+
+```bash
+curl -X POST "http://127.0.0.1:8000/api/ai/order-assistant/" -H "Content-Type: application/json" -d "{\"user_input\":\"我想喝冰的、低糖、不要牛奶的咖啡\",\"user_id\":1}"
 ```
 
 说明：

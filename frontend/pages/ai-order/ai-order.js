@@ -25,11 +25,14 @@ function formatOptionValue(temperature, sugar, milk) {
   else if (sugar === 'HALF') labels.push('半糖');
   else if (sugar === 'NORMAL') labels.push('正常糖');
 
-  if (milk === 'none') labels.push('无奶');
-  else if (milk === 'oat') labels.push('燕麦奶');
-  else if (milk === 'almond') labels.push('杏仁奶');
-  else if (milk === 'soy') labels.push('豆奶');
-  else if (milk === 'whole') labels.push('全脂奶');
+  const milkValue = (milk || '').toString().trim();
+  const milkNorm = milkValue.toLowerCase();
+  if (milkNorm === 'none') labels.push('无奶');
+  else if (milkNorm === 'milk') labels.push('加奶');
+  else if (milkNorm === 'oat' || milkNorm === 'oat_milk') labels.push('燕麦奶');
+  else if (milkNorm === 'almond' || milkNorm === 'almond_milk') labels.push('杏仁奶');
+  else if (milkNorm === 'soy' || milkNorm === 'soy_milk') labels.push('豆奶');
+  else if (milkNorm === 'whole' || milkNorm === 'whole_milk') labels.push('全脂奶');
 
   return labels;
 }

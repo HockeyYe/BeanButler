@@ -1,51 +1,15 @@
 <view class="menu-page">
 
-<!-- 顶部 AI 推荐：横跨全屏 -->
-<view class="ai-rec-section" wx:if="{{aiRecs.length > 0}}">
-  <view class="ai-rec-header">
-    <view class="ai-rec-header-left">
-      <text class="ai-rec-title">猜你喜欢</text>
-      <text class="ai-rec-sub" wx:if="{{aiRecSource === 'cf'}}">根据你的喜好</text>
-      <text class="ai-rec-sub" wx:elif="{{aiRecSource === 'popular'}}">今日热门</text>
+
+<view class="ai-order-entry" bindtap="goToAiOrder">
+  <view class="ai-order-entry-left">
+    <view class="ai-order-entry-icon">🤖</view>
+    <view class="ai-order-entry-text">
+      <text class="ai-order-entry-title">AI 帮我点</text>
+      <text class="ai-order-entry-desc">说出口味、温度或预算，让 AI 推荐适合你的咖啡</text>
     </view>
   </view>
-
-  <scroll-view class="ai-rec-scroll" scroll-x enhanced show-scrollbar="{{false}}">
-    <view class="ai-rec-list">
-      <view
-        wx:for="{{aiRecs}}"
-        wx:key="id"
-        class="ai-rec-card"
-        bindtap="openCustomize"
-        data-product="{{item}}"
-      >
-        <image
-          class="ai-rec-img"
-          src="{{item.image ? item.image : '/images/default.png'}}"
-          mode="aspectFill"
-        ></image>
-        <view class="ai-rec-info">
-          <text class="ai-rec-name">{{item.name}}</text>
-          <text class="ai-rec-price">MOP {{item.price}}</text>
-        </view>
-      </view>
-    </view>
-  </scroll-view>
-</view>
-
-<view class="ai-test-strip">
-  <view class="ai-test-copy">
-    <text class="ai-test-title">AI 点单接口测试</text>
-    <text class="ai-test-desc">固定测试：冰的、低糖、不要牛奶</text>
-  </view>
-  <button
-    class="ai-test-btn"
-    loading="{{aiTestLoading}}"
-    disabled="{{aiTestLoading}}"
-    bindtap="runAiOrderTest"
-  >
-    测试
-  </button>
+  <view class="ai-order-entry-arrow">→</view>
 </view>
 
 <!-- 下方才开始左右分区 -->

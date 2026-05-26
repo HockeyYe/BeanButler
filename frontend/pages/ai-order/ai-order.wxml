@@ -1,0 +1,159 @@
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-inner" style="height: {{navBarHeight}}px; top: {{navTop - statusBarHeight}}px;">
+      <view class="nav-back" bindtap="goBack">
+        <view class="nav-back-icon"></view>
+      </view>
+      <view class="nav-title">AI 帮我点</view>
+    </view>
+  </view>
+
+  <!-- 主内容区域 -->
+  <scroll-view
+    class="main-scroll"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-into-view="{{hasResults ? 'results-anchor' : ''}}"
+  >
+    <view class="scroll-inner">
+
+      <!-- 未出结果的 Hero 区域 -->
+      <view class="hero-section" wx:if="{{!hasResults && !hasError}}">
+        <view class="assistant-avatar">
+          <view class="avatar-bg">
+            <text class="avatar-icon">🤖</text>
+          </view>
+        </view>
+        <view class="hero-title">今天想喝什么？</view>
+        <view class="hero-subtitle">说出口味、温度或预算，让 AI 帮你挑选最适合的咖啡</view>
+      </view>
+
+      <!-- 已出结果的 Hero（简化版） -->
+      <view class="hero-section hero-compact" wx:elif="{{hasResults}}">
+        <view class="hero-title-small">AI 推荐结果</view>
+        <view class="hero-subtitle-small">根据你的偏好找到了 {{recommendations.length}} 款饮品</view>
+      </view>
+
+      <!-- 错误状态 -->
+      <view class="error-section" wx:if="{{hasError}}">
+        <view class="error-icon">🤔</view>
+        <view class="error-text">{{errorMessage}}</view>
+        <view class="error-action" bindtap="startOver">
+          <text>换种说法试试</text>
+        </view>
+      </view>
+
+      <!-- 快捷需求 prompt chips（未出结果时显示） -->
+      <view class="prompt-section" wx:if="{{!hasResults && !hasError && !loading}}">
+        <view class="prompt-label">💡 试试这样说</view>
+        <view class="prompt-chips">
+          <view
+            wx:for="{{promptChips}}"
+            wx:key="text"
+            class="prompt-chip"
+            bindtap="tapPromptChip"
+            data-text="{{item.text}}"
+          >
+            <text class="chip-emoji">{{item.emoji}}</text>
+            <text class="chip-text">{{item.text}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Loading 状态 -->
+      <view class="loading-section" wx:if="{{loading}}">
+        <view class="loading-dots">
+          <view class="dot dot-1"></view>
+          <view class="dot dot-2"></view>
+          <view class="dot dot-3"></view>
+        </view>
+        <view class="loading-text">正在分析你的口味...</view>
+      </view>
+
+      <!-- 推荐结果卡片 -->
+      <view class="results-section" wx:if="{{hasResults}}">
+        <view id="results-anchor"></view>
+
+        <block wx:for="{{recommendations}}" wx:key="product_id" wx:for-index="idx">
+          <view class="result-card">
+            <!-- 卡片头部：匹配标签 + 选项标签 -->
+            <view class="card-header">
+              <view class="match-tag">{{item.matchTag}}</view>
+              <view class="option-tags">
+                <text
+                  wx:for="{{item.optionLabels}}"
+                  wx:key="*this"
+                  wx:for-item="opt"
+                  class="option-tag"
+                >{{opt}}</text>
+              </view>
+            </view>
+
+            <!-- 卡片主体：图片 + 名称 + 价格 -->
+            <view class="card-body">
+              <image
+                class="card-image"
+                src="{{item.image}}"
+                mode="aspectFill"
+              ></image>
+              <view class="card-info">
+                <view class="card-name">{{item.product_name}}</view>
+                <view class="card-price" wx:if="{{item.price}}">{{item.price}}</view>
+              </view>
+            </view>
+
+            <!-- 推荐理由 -->
+            <view class="card-reason">
+              <text class="reason-icon">💬</text>
+              <text class="reason-text">{{item.reason}}</text>
+            </view>
+
+            <!-- 选择规格按钮（占位，Day 6 不实现加购） -->
+            <view class="card-action" bindtap="selectProduct" data-product="{{item}}">
+              <text class="action-text">选择规格</text>
+              <text class="action-arrow">→</text>
+            </view>
+          </view>
+        </block>
+
+        <!-- 结果页底部重新推荐按钮 -->
+        <view class="retry-section" wx:if="{{hasResults}}">
+          <view class="retry-btn" bindtap="startOver">
+            <text class="retry-icon">🔄</text>
+            <text>换种需求试试</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 底部留白：给 input 区域让位 -->
+      <view class="bottom-spacer"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区域 -->
+  <view class="input-zone">
+    <view class="input-row">
+      <textarea
+        class="input-field"
+        value="{{userInput}}"
+        placeholder="例如：冰的、低糖、不要牛奶的咖啡..."
+        placeholder-style="color: #B0A89F;"
+        auto-height
+        maxlength="200"
+        bindinput="onInput"
+        cursor-spacing="20"
+        adjust-position="{{false}}"
+        show-confirm-bar="{{false}}"
+      ></textarea>
+      <view
+        class="send-btn {{userInput ? 'active' : ''}} {{loading ? 'disabled' : ''}}"
+        bindtap="sendOrder"
+      >
+        <text wx:if="{{!loading}}">开始推荐</text>
+        <text wx:else>...</text>
+      </view>
+    </view>
+  </view>
+</view>

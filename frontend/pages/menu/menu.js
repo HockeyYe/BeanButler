@@ -37,10 +37,7 @@ Page({
     menuList: [],
 
     isLoading: true,
-    aiTestLoading: false,
 
-    aiRecs: [],
-    aiRecSource: '',
 
     showCustomize: false,
     currentProduct: null,
@@ -64,7 +61,6 @@ Page({
     this.loadProducts();   // Bug 5 fix: re-fetch so products marked unavailable disappear immediately
     const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo');
     this.setData({ userInfo });
-    this.fetchRecommendations();
     this.updateCartSummary();
     
     // 設定 TabBar 選中狀態
@@ -124,73 +120,10 @@ Page({
   },
 
   // 拉取 AI 推薦
-  fetchRecommendations() {
-    const user = app.globalData.userInfo || wx.getStorageSync('userInfo') || {};
-    const url  = user.member_id
-      ? '/api/recommendations/?member_id=' + user.member_id
-      : '/api/recommendations/';
-    request(url, 'GET')
-      .then(res => {
-        if (res && res.success && res.recommendations && res.recommendations.length > 0) {
-          // ✅ 核心修改：修復 AI 推薦產品的圖片路徑
-          let recs = res.recommendations;
-          recs.forEach(p => {
-            p.image = fixImageUrl(p.image);
-          });
+,
 
-          this.setData({
-            aiRecs:      recs,
-            aiRecSource: res.source,
-          });
-        }
-      })
-      .catch(() => {});
-  },
-
-  runAiOrderTest() {
-    const user = app.globalData.userInfo || wx.getStorageSync('userInfo') || {};
-    const memberId = user.member_id;
-
-    if (!app.globalData.hasLogin || !memberId) {
-      wx.showModal({
-        title: '请先登录',
-        content: '登录后即可使用 AI 点单助手',
-        confirmText: '去登录',
-        success: res => {
-          if (res.confirm) wx.navigateTo({ url: '/pages/login/login' });
-        }
-      });
-      return;
-    }
-
-    this.setData({ aiTestLoading: true });
-    request('/api/ai/order-assistant/', 'POST', {
-      user_input: '我想喝冰的、低糖、不要牛奶的咖啡',
-      user_id: memberId
-    })
-      .then(res => {
-        console.log('AI 点单测试返回:', res);
-
-        if (res && res.error_code === 'LOGIN_REQUIRED') {
-          wx.navigateTo({ url: '/pages/login/login' });
-          return;
-        }
-
-        const recommendations = (res && res.data && res.data.recommendations) || [];
-        const names = recommendations.map(item => item.product_name).join('、');
-        wx.showModal({
-          title: res && res.success ? 'AI 测试成功' : 'AI 测试结果',
-          content: names ? `${res.message || '接口已返回'}\n推荐：${names}` : (res && res.message) || '暂无推荐结果',
-          showCancel: false
-        });
-      })
-      .catch(err => {
-        console.error('AI 点单测试失败:', err);
-        wx.showToast({ title: 'AI 测试失败', icon: 'none' });
-      })
-      .finally(() => {
-        this.setData({ aiTestLoading: false });
-      });
+  goToAiOrder() {
+    wx.navigateTo({ url: '/pages/ai-order/ai-order' });
   },
 
   // 組建菜單分類結構

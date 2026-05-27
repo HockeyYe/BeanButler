@@ -58,6 +58,10 @@ coverage/
 # WeChat devtool private/local files
 project.private.config.json
 miniprogram_npm/
+frontend/.wechat-agent/
+
+# Local agent/debug tooling
+tools/
 
 # macOS archive metadata
 __MACOSX/
